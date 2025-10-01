@@ -8,6 +8,7 @@ using TaskManager.API.Extensions;
 using TaskManager.API.Middleware;
 using TaskManager.Application;
 using TaskManager.Infrastructure;
+using TaskManager.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,9 +122,25 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Migrações desabilitadas para desenvolvimento
-// Para aplicar migrações manualmente, execute: dotnet ef database update
-Log.Information("Migrações automáticas desabilitadas - use 'dotnet ef database update' para aplicar migrações");
+// Aplicar migrações automaticamente em produção
+if (app.Environment.IsProduction())
+{
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    try
+    {
+        context.Database.Migrate();
+        Log.Information("Migrações aplicadas com sucesso");
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "Erro ao aplicar migrações");
+    }
+}
+else
+{
+    Log.Information("Ambiente de desenvolvimento - migrações não aplicadas automaticamente");
+}
 
 try
 {

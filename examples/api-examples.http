@@ -1,4 +1,4 @@
-POST https://gerenciador-de-tarefas.railway.internal/api/users/register
+POST https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/users/register
 Content-Type: application/json
 
 {
@@ -7,14 +7,14 @@ Content-Type: application/json
   "password": "senha123",
   "role": 0
 }
-POST https://gerenciador-de-tarefas.railway.internal/api/users/login
+POST https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/users/login
 Content-Type: application/json
 
 {
   "email": "joao@exemplo.com",
   "password": "senha123"
 }
-POST https://gerenciador-de-tarefas.railway.internal/api/tasks
+POST https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks
 Content-Type: application/json
 Authorization: Bearer {token}
 
@@ -25,24 +25,24 @@ Authorization: Bearer {token}
   "priority": 2,
   "dueDate": "2024-12-31T23:59:59Z"
 }
-GET https://gerenciador-de-tarefas.railway.internal/api/tasks
+GET https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks
 Authorization: Bearer {token}
 
-GET https://gerenciador-de-tarefas.railway.internal/api/tasks?userId=00000000-0000-0000-0000-000000000000
+GET https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks?userId=00000000-0000-0000-0000-000000000000
 Authorization: Bearer {token}
 
-GET https://gerenciador-de-tarefas.railway.internal/api/tasks?status=0
+GET https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks?status=0
 Authorization: Bearer {token}
 
-GET https://gerenciador-de-tarefas.railway.internal/api/tasks?priority=2
+GET https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks?priority=2
 Authorization: Bearer {token}
 
-GET https://gerenciador-de-tarefas.railway.internal/api/tasks?searchTerm=autenticação
+GET https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks?searchTerm=autenticação
 Authorization: Bearer {token}
 
-GET https://gerenciador-de-tarefas.railway.internal/api/tasks/00000000-0000-0000-0000-000000000000
+GET https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks/00000000-0000-0000-0000-000000000000
 Authorization: Bearer {token}
-PUT https://gerenciador-de-tarefas.railway.internal/api/tasks/00000000-0000-0000-0000-000000000000
+PUT https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks/00000000-0000-0000-0000-000000000000
 Content-Type: application/json
 Authorization: Bearer {token}
 
@@ -55,9 +55,9 @@ Authorization: Bearer {token}
   "dueDate": "2024-12-25T18:00:00Z"
 }
 
-DELETE https://gerenciador-de-tarefas.railway.internal/api/tasks/00000000-0000-0000-0000-000000000000
+DELETE https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks/00000000-0000-0000-0000-000000000000
 Authorization: Bearer {token}
-POST https://gerenciador-de-tarefas.railway.internal/api/users/register
+POST https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/users/register
 Content-Type: application/json
 
 {
@@ -67,7 +67,7 @@ Content-Type: application/json
   "role": 1
 }
 
-POST https://gerenciador-de-tarefas.railway.internal/api/users/login
+POST https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/users/login
 Content-Type: application/json
 
 {
