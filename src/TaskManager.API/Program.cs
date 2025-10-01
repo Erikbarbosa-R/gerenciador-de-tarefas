@@ -120,6 +120,14 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Rota de health check
+app.MapGet("/health", () => new { 
+    status = "ok", 
+    timestamp = DateTime.UtcNow,
+    version = "1.0.0",
+    environment = app.Environment.EnvironmentName
+});
+
 app.MapControllers();
 
 // Aplicar migrações automaticamente em produção

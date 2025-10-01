@@ -1,3 +1,5 @@
+GET https://gerenciador-de-tarefas-production-7bba.up.railway.app/health
+
 POST https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/users/register
 Content-Type: application/json
 
