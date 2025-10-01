@@ -28,7 +28,9 @@ public static class DependencyInjection
                 options.UseMySql(
                     connectionString,
                     new MySqlServerVersion(new Version(8, 0, 0)),
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                          .EnableRetryOnFailure(3)
+                          .CommandTimeout(60));
             }
             else if (connectionString.Contains("Data Source="))
             {

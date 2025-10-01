@@ -138,15 +138,35 @@ if (app.Environment.IsProduction())
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         
-        // Testar conexão antes de aplicar migrações
-        if (context.Database.CanConnect())
+        // Criar banco se não existir e aplicar migrações
+        try
         {
-            context.Database.Migrate();
-            Log.Information("Migrações aplicadas com sucesso");
+            if (context.Database.CanConnect())
+            {
+                Log.Information("Banco de dados conectado. Aplicando migrações...");
+                context.Database.Migrate();
+                Log.Information("Migrações aplicadas com sucesso");
+            }
+            else
+            {
+                Log.Information("Banco não existe. Criando banco e aplicando migrações...");
+                context.Database.EnsureCreated();
+                context.Database.Migrate();
+                Log.Information("Banco criado e migrações aplicadas com sucesso");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Log.Warning("Não foi possível conectar ao banco de dados. Migrações não aplicadas.");
+            Log.Warning("Erro ao conectar/criar banco: {Message}. Tentando criar banco manualmente...", ex.Message);
+            try
+            {
+                context.Database.EnsureCreated();
+                Log.Information("Banco criado com EnsureCreated");
+            }
+            catch (Exception ex2)
+            {
+                Log.Error(ex2, "Falha ao criar banco: {Message}", ex2.Message);
+            }
         }
     }
     catch (Exception ex)
