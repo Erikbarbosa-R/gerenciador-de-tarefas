@@ -16,15 +16,21 @@ public static class DependencyInjection
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             
+            // Verificar se a string de conexão está vazia ou nula
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("String de conexão não configurada. Verifique a variável DATABASE_URL no Railway.");
+            }
+            
             // Se for uma URL de conexão (Railway), usar diretamente
-            if (connectionString?.StartsWith("mysql://") == true)
+            if (connectionString.StartsWith("mysql://"))
             {
                 options.UseMySql(
                     connectionString,
                     new MySqlServerVersion(new Version(8, 0, 0)),
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
             }
-            else if (connectionString?.Contains("Data Source=") == true)
+            else if (connectionString.Contains("Data Source="))
             {
                 // SQLite para desenvolvimento local
                 options.UseSqlite(

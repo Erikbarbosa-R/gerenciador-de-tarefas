@@ -133,16 +133,26 @@ app.MapControllers();
 // Aplicar migrações automaticamente em produção
 if (app.Environment.IsProduction())
 {
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
-        context.Database.Migrate();
-        Log.Information("Migrações aplicadas com sucesso");
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        
+        // Testar conexão antes de aplicar migrações
+        if (context.Database.CanConnect())
+        {
+            context.Database.Migrate();
+            Log.Information("Migrações aplicadas com sucesso");
+        }
+        else
+        {
+            Log.Warning("Não foi possível conectar ao banco de dados. Migrações não aplicadas.");
+        }
     }
     catch (Exception ex)
     {
-        Log.Error(ex, "Erro ao aplicar migrações");
+        Log.Error(ex, "Erro ao aplicar migrações: {Message}", ex.Message);
+        // Não falhar a aplicação se as migrações falharem
     }
 }
 else
