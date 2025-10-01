@@ -1,0 +1,76 @@
+POST https://localhost:7000/api/users/register
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@exemplo.com",
+  "password": "senha123",
+  "role": 0
+}
+POST https://localhost:7000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "joao@exemplo.com",
+  "password": "senha123"
+}
+POST https://localhost:7000/api/tasks
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "title": "Implementar autenticação",
+  "description": "Implementar sistema de autenticação JWT na API",
+  "userId": "00000000-0000-0000-0000-000000000000",
+  "priority": 2,
+  "dueDate": "2024-12-31T23:59:59Z"
+}
+GET https://localhost:7000/api/tasks
+Authorization: Bearer {token}
+
+GET https://localhost:7000/api/tasks?userId=00000000-0000-0000-0000-000000000000
+Authorization: Bearer {token}
+
+GET https://localhost:7000/api/tasks?status=0
+Authorization: Bearer {token}
+
+GET https://localhost:7000/api/tasks?priority=2
+Authorization: Bearer {token}
+
+GET https://localhost:7000/api/tasks?searchTerm=autenticação
+Authorization: Bearer {token}
+
+GET https://localhost:7000/api/tasks/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {token}
+PUT https://localhost:7000/api/tasks/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "title": "Implementar autenticação JWT",
+  "description": "Implementar sistema completo de autenticação JWT na API com refresh tokens",
+  "status": 1,
+  "priority": 3,
+  "dueDate": "2024-12-25T18:00:00Z"
+}
+
+DELETE https://localhost:7000/api/tasks/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {token}
+POST https://localhost:7000/api/users/register
+Content-Type: application/json
+
+{
+  "name": "Admin Sistema",
+  "email": "admin@exemplo.com",
+  "password": "admin123",
+  "role": 1
+}
+
+POST https://localhost:7000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "admin@exemplo.com",
+  "password": "admin123"
+}
