@@ -28,6 +28,8 @@ public class PasswordHash : IEquatable<PasswordHash>
         return new PasswordHash(hash);
     }
 
+    public static PasswordHash From(string hash) => new(hash);
+
     public bool Verify(string password)
     {
         if (string.IsNullOrWhiteSpace(password))

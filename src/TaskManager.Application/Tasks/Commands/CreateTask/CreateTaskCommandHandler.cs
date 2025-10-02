@@ -28,12 +28,22 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Resul
                 return Result.Failure<Guid>("Usuário não encontrado");
             }
 
+            if (request.AssignedToUserId.HasValue)
+            {
+                var assignedUser = await _unitOfWork.Users.GetByIdAsync(request.AssignedToUserId.Value, cancellationToken);
+                if (assignedUser == null)
+                {
+                    return Result.Failure<Guid>("Usuário atribuído não encontrado");
+                }
+            }
+
             var task = new Domain.Entities.Task(
                 request.Title,
                 request.Description,
                 request.UserId,
                 request.Priority,
-                request.DueDate
+                request.DueDate,
+                request.AssignedToUserId
             );
 
             await _unitOfWork.Tasks.AddAsync(task, cancellationToken);

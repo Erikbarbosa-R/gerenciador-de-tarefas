@@ -6,6 +6,7 @@ namespace TaskManager.Domain.Interfaces;
 
 public interface ITaskRepository : IRepository<Entities.Task>
 {
+    System.Threading.Tasks.Task<Entities.Task?> GetByIdForDeleteAsync(Guid id, CancellationToken cancellationToken = default);
     System.Threading.Tasks.Task<IEnumerable<Entities.Task>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
     System.Threading.Tasks.Task<IEnumerable<Entities.Task>> GetByStatusAsync(Enums.TaskStatus status, CancellationToken cancellationToken = default);
     System.Threading.Tasks.Task<IEnumerable<Entities.Task>> GetByPriorityAsync(TaskPriority priority, CancellationToken cancellationToken = default);

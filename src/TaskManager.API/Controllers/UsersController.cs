@@ -17,31 +17,25 @@ public class UsersController : ControllerBase
         _mediator = mediator;
     }
 
-    /// <summary>
-    /// Registra um novo usuário
-    /// </summary>
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] CreateUserCommand command)
+    public async Task<IActionResult> Register([FromBody] CreateUserCommand request)
     {
-        var result = await _mediator.Send(command);
+        var user = await _mediator.Send(request);
         
-        if (result.IsFailure)
-            return BadRequest(result.Error);
+        if (user.IsFailure)
+            return BadRequest(user.Error);
 
-        return CreatedAtAction(nameof(Register), new { id = result.Value }, result.Value);
+        return Ok(user.Value);
     }
 
-    /// <summary>
-    /// Autentica um usuário e retorna um token JWT
-    /// </summary>
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] AuthenticateUserCommand command)
+    public async Task<IActionResult> Login([FromBody] AuthenticateUserCommand authRequest)
     {
-        var result = await _mediator.Send(command);
+        var token = await _mediator.Send(authRequest);
         
-        if (result.IsFailure)
-            return Unauthorized(result.Error);
+        if (token.IsFailure)
+            return Unauthorized(token.Error);
 
-        return Ok(result.Value);
+        return Ok(token.Value);
     }
 }

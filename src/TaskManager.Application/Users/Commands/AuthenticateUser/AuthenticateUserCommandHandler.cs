@@ -63,7 +63,15 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
 
     private string GenerateJwtToken(Domain.Entities.User user)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+        var jwtKeyString = _configuration["Jwt:Key"]!;
+        
+        // Log para debug da JWT Key
+        Console.WriteLine($"DEBUG JWT Key Length: {jwtKeyString.Length} characters");
+        Console.WriteLine($"DEBUG JWT Key Bytes Length: {Encoding.UTF8.GetBytes(jwtKeyString).Length} bytes");
+        Console.WriteLine($"DEBUG JWT Key Bits: {Encoding.UTF8.GetBytes(jwtKeyString).Length * 8} bits");
+        Console.WriteLine($"DEBUG JWT Key (first 20 chars): {jwtKeyString.Substring(0, Math.Min(20, jwtKeyString.Length))}...");
+        
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKeyString));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]

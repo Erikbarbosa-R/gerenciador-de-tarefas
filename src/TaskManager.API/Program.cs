@@ -9,10 +9,12 @@ using TaskManager.API.Middleware;
 using TaskManager.Application;
 using TaskManager.Infrastructure;
 using TaskManager.Infrastructure.Data;
+using DotNetEnv;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar Serilog
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
@@ -22,12 +24,11 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-// Add services to the container.
-builder.Services.AddControllers();
+var services = builder.Services;
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
@@ -38,7 +39,6 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header usando o esquema Bearer. Exemplo: \"Authorization: Bearer {token}\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -61,12 +61,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Configurar autenticação JWT
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key não configurada");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT Issuer não configurado");
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience não configurado");
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -81,14 +80,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization();
+services.AddAuthorization();
+services.AddApplication();
+services.AddInfrastructure(builder.Configuration);
 
-// Adicionar camadas da aplicação
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
-
-// Configurar CORS
-builder.Services.AddCors(options =>
+services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
@@ -100,8 +96,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-// Swagger habilitado para todos os ambientes
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -113,14 +107,12 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
-// Adicionar middlewares de tratamento de erro
 app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Rota de health check
 app.MapGet("/health", () => new { 
     status = "ok", 
     timestamp = DateTime.UtcNow,
@@ -129,56 +121,6 @@ app.MapGet("/health", () => new {
 });
 
 app.MapControllers();
-
-// Aplicar migrações automaticamente em produção
-if (app.Environment.IsProduction())
-{
-    try
-    {
-        using var scope = app.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        
-        // Criar banco se não existir e aplicar migrações
-        try
-        {
-            if (context.Database.CanConnect())
-            {
-                Log.Information("Banco de dados conectado. Aplicando migrações...");
-                context.Database.Migrate();
-                Log.Information("Migrações aplicadas com sucesso");
-            }
-            else
-            {
-                Log.Information("Banco não existe. Criando banco e aplicando migrações...");
-                context.Database.EnsureCreated();
-                context.Database.Migrate();
-                Log.Information("Banco criado e migrações aplicadas com sucesso");
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Warning("Erro ao conectar/criar banco: {Message}. Tentando criar banco manualmente...", ex.Message);
-            try
-            {
-                context.Database.EnsureCreated();
-                Log.Information("Banco criado com EnsureCreated");
-            }
-            catch (Exception ex2)
-            {
-                Log.Error(ex2, "Falha ao criar banco: {Message}", ex2.Message);
-            }
-        }
-    }
-    catch (Exception ex)
-    {
-        Log.Error(ex, "Erro ao aplicar migrações: {Message}", ex.Message);
-        // Não falhar a aplicação se as migrações falharem
-    }
-}
-else
-{
-    Log.Information("Ambiente de desenvolvimento - migrações não aplicadas automaticamente");
-}
 
 try
 {

@@ -63,12 +63,12 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users
             .Include(u => u.Tasks)
-            .FirstOrDefaultAsync(u => u.Email.Value == email.Value, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
     }
 
     public async Task<bool> EmailExistsAsync(Email email, CancellationToken cancellationToken = default)
     {
-        return await _context.Users.AnyAsync(u => u.Email.Value == email.Value, cancellationToken);
+        return await _context.Users.AnyAsync(u => u.Email == email, cancellationToken);
     }
 
     public async Task<IEnumerable<User>> GetActiveUsersAsync(CancellationToken cancellationToken = default)

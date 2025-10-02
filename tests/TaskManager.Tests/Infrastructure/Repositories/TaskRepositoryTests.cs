@@ -24,10 +24,10 @@ public class TaskRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task AddAsync_ValidTask_ShouldAddTask()
+    public async System.Threading.Tasks.Task AddAsync_ValidTask_ShouldAddTask()
     {
         // Arrange
-        var task = new Task("Tarefa Teste", "Descrição", Guid.NewGuid());
+        var task = new TaskEntity("Tarefa Teste", "Descrição", Guid.NewGuid());
 
         // Act
         var result = await _repository.AddAsync(task);
@@ -42,10 +42,10 @@ public class TaskRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task GetByIdAsync_ExistingTask_ShouldReturnTask()
+    public async System.Threading.Tasks.Task GetByIdAsync_ExistingTask_ShouldReturnTask()
     {
         // Arrange
-        var task = new Task("Tarefa Teste", "Descrição", Guid.NewGuid());
+        var task = new TaskEntity("Tarefa Teste", "Descrição", Guid.NewGuid());
         _context.Tasks.Add(task);
         await _context.SaveChangesAsync();
 
@@ -58,7 +58,7 @@ public class TaskRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task GetByIdAsync_NonExistingTask_ShouldReturnNull()
+    public async System.Threading.Tasks.Task GetByIdAsync_NonExistingTask_ShouldReturnNull()
     {
         // Arrange
         var nonExistingId = Guid.NewGuid();
@@ -71,13 +71,13 @@ public class TaskRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task GetByUserIdAsync_ValidUserId_ShouldReturnUserTasks()
+    public async System.Threading.Tasks.Task GetByUserIdAsync_ValidUserId_ShouldReturnUserTasks()
     {
         // Arrange
         var userId = Guid.NewGuid();
-        var task1 = new Task("Tarefa 1", "Descrição 1", userId);
-        var task2 = new Task("Tarefa 2", "Descrição 2", userId);
-        var task3 = new Task("Tarefa 3", "Descrição 3", Guid.NewGuid()); // Different user
+        var task1 = new TaskEntity("Tarefa 1", "Descrição 1", userId);
+        var task2 = new TaskEntity("Tarefa 2", "Descrição 2", userId);
+        var task3 = new TaskEntity("Tarefa 3", "Descrição 3", Guid.NewGuid()); // Different user
 
         _context.Tasks.AddRange(task1, task2, task3);
         await _context.SaveChangesAsync();
@@ -91,33 +91,33 @@ public class TaskRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task GetByStatusAsync_ValidStatus_ShouldReturnTasksWithStatus()
+    public async System.Threading.Tasks.Task GetByStatusAsync_ValidStatus_ShouldReturnTasksWithStatus()
     {
         // Arrange
-        var task1 = new Task("Tarefa 1", "Descrição 1", Guid.NewGuid());
-        var task2 = new Task("Tarefa 2", "Descrição 2", Guid.NewGuid());
+        var task1 = new TaskEntity("Tarefa 1", "Descrição 1", Guid.NewGuid());
+        var task2 = new TaskEntity("Tarefa 2", "Descrição 2", Guid.NewGuid());
         task2.MarkAsCompleted();
 
         _context.Tasks.AddRange(task1, task2);
         await _context.SaveChangesAsync();
 
         // Act
-        var pendingTasks = await _repository.GetByStatusAsync(TaskStatus.Pending);
-        var completedTasks = await _repository.GetByStatusAsync(TaskStatus.Completed);
+        var pendingTasks = await _repository.GetByStatusAsync(TaskStatusEnum.Pending);
+        var completedTasks = await _repository.GetByStatusAsync(TaskStatusEnum.Completed);
 
         // Assert
         pendingTasks.Should().HaveCount(1);
-        pendingTasks.Should().OnlyContain(t => t.Status == TaskStatus.Pending);
-        
+        pendingTasks.Should().OnlyContain(t => t.Status == TaskStatusEnum.Pending);
+
         completedTasks.Should().HaveCount(1);
-        completedTasks.Should().OnlyContain(t => t.Status == TaskStatus.Completed);
+        completedTasks.Should().OnlyContain(t => t.Status == TaskStatusEnum.Completed);
     }
 
     [Fact]
-    public async Task DeleteAsync_ExistingTask_ShouldMarkAsDeleted()
+    public async System.Threading.Tasks.Task DeleteAsync_ExistingTask_ShouldMarkAsDeleted()
     {
         // Arrange
-        var task = new Task("Tarefa Teste", "Descrição", Guid.NewGuid());
+        var task = new TaskEntity("Tarefa Teste", "Descrição", Guid.NewGuid());
         _context.Tasks.Add(task);
         await _context.SaveChangesAsync();
 

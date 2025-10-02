@@ -29,7 +29,7 @@ public class CreateTaskCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ValidCommand_ShouldReturnSuccess()
+    public async System.Threading.Tasks.Task Handle_ValidCommand_ShouldReturnSuccess()
     {
         // Arrange
         var userId = Guid.NewGuid();
@@ -50,8 +50,8 @@ public class CreateTaskCommandHandlerTests
         _userRepositoryMock.Setup(x => x.GetByIdAsync(userId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
-        _taskRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Domain.Entities.Task>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Domain.Entities.Task task, CancellationToken ct) => task);
+        _taskRepositoryMock.Setup(x => x.AddAsync(It.IsAny<TaskEntity>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((TaskEntity task, CancellationToken ct) => task);
 
         _unitOfWorkMock.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
@@ -65,12 +65,12 @@ public class CreateTaskCommandHandlerTests
         result.Value.Should().NotBeEmpty();
 
         _userRepositoryMock.Verify(x => x.GetByIdAsync(userId, It.IsAny<CancellationToken>()), Times.Once);
-        _taskRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Domain.Entities.Task>(), It.IsAny<CancellationToken>()), Times.Once);
+        _taskRepositoryMock.Verify(x => x.AddAsync(It.IsAny<TaskEntity>(), It.IsAny<CancellationToken>()), Times.Once);
         _unitOfWorkMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
-    public async Task Handle_UserNotFound_ShouldReturnFailure()
+    public async System.Threading.Tasks.Task Handle_UserNotFound_ShouldReturnFailure()
     {
         // Arrange
         var userId = Guid.NewGuid();
@@ -92,6 +92,6 @@ public class CreateTaskCommandHandlerTests
         result.Error.Should().Be("Usuário não encontrado");
 
         _userRepositoryMock.Verify(x => x.GetByIdAsync(userId, It.IsAny<CancellationToken>()), Times.Once);
-        _taskRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Domain.Entities.Task>(), It.IsAny<CancellationToken>()), Times.Never);
+        _taskRepositoryMock.Verify(x => x.AddAsync(It.IsAny<TaskEntity>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }

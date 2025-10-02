@@ -36,7 +36,7 @@ public class ExceptionHandlingMiddleware
             error = new
             {
                 message = exception.Message,
-                details = exception.InnerException?.Message,
+                details = exception.InnerException?.Message ?? (string?)null,
                 timestamp = DateTime.UtcNow
             }
         };
@@ -62,7 +62,7 @@ public class ExceptionHandlingMiddleware
                     error = new
                     {
                         message = "Erro interno do servidor",
-                        details = exception.Message,
+                        details = exception.Message ?? (string?)null,
                         timestamp = DateTime.UtcNow
                     }
                 };

@@ -17,7 +17,7 @@ public class TaskTests
         var dueDate = DateTime.UtcNow.AddDays(1);
 
         // Act
-        var task = new Task(title, description, userId, priority, dueDate);
+        var task = new TaskEntity(title, description, userId, priority, dueDate);
 
         // Assert
         task.Should().NotBeNull();
@@ -26,7 +26,7 @@ public class TaskTests
         task.UserId.Should().Be(userId);
         task.Priority.Should().Be(priority);
         task.DueDate.Should().Be(dueDate);
-        task.Status.Should().Be(TaskStatus.Pending);
+        task.Status.Should().Be(TaskStatusEnum.Pending);
         task.IsDeleted.Should().BeFalse();
         task.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
     }
@@ -35,7 +35,7 @@ public class TaskTests
     public void UpdateTitle_ValidTitle_ShouldUpdateTitle()
     {
         // Arrange
-        var task = new Task("Título Original", "Descrição", Guid.NewGuid());
+        var task = new TaskEntity("Título Original", "Descrição", Guid.NewGuid());
         var newTitle = "Novo Título";
 
         // Act
@@ -51,7 +51,7 @@ public class TaskTests
     public void UpdateTitle_EmptyTitle_ShouldThrowException()
     {
         // Arrange
-        var task = new Task("Título Original", "Descrição", Guid.NewGuid());
+        var task = new TaskEntity("Título Original", "Descrição", Guid.NewGuid());
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => task.UpdateTitle(""));
@@ -62,13 +62,13 @@ public class TaskTests
     public void ChangeStatus_ValidStatus_ShouldUpdateStatus()
     {
         // Arrange
-        var task = new Task("Tarefa", "Descrição", Guid.NewGuid());
+        var task = new TaskEntity("Tarefa", "Descrição", Guid.NewGuid());
 
         // Act
-        task.ChangeStatus(TaskStatus.InProgress);
+        task.ChangeStatus(TaskStatusEnum.InProgress);
 
         // Assert
-        task.Status.Should().Be(TaskStatus.InProgress);
+        task.Status.Should().Be(TaskStatusEnum.InProgress);
         task.UpdatedAt.Should().NotBeNull();
     }
 
@@ -76,13 +76,13 @@ public class TaskTests
     public void MarkAsCompleted_ShouldSetStatusToCompleted()
     {
         // Arrange
-        var task = new Task("Tarefa", "Descrição", Guid.NewGuid());
+        var task = new TaskEntity("Tarefa", "Descrição", Guid.NewGuid());
 
         // Act
         task.MarkAsCompleted();
 
         // Assert
-        task.Status.Should().Be(TaskStatus.Completed);
+        task.Status.Should().Be(TaskStatusEnum.Completed);
         task.UpdatedAt.Should().NotBeNull();
     }
 
@@ -90,7 +90,7 @@ public class TaskTests
     public void IsOverdue_TaskWithPastDueDate_ShouldReturnTrue()
     {
         // Arrange
-        var task = new Task("Tarefa", "Descrição", Guid.NewGuid(), TaskPriority.Medium, DateTime.UtcNow.AddDays(-1));
+        var task = new TaskEntity("Tarefa", "Descrição", Guid.NewGuid(), TaskPriority.Medium, DateTime.UtcNow.AddDays(-1));
 
         // Act & Assert
         task.IsOverdue().Should().BeTrue();
@@ -100,7 +100,7 @@ public class TaskTests
     public void IsOverdue_CompletedTask_ShouldReturnFalse()
     {
         // Arrange
-        var task = new Task("Tarefa", "Descrição", Guid.NewGuid(), TaskPriority.Medium, DateTime.UtcNow.AddDays(-1));
+        var task = new TaskEntity("Tarefa", "Descrição", Guid.NewGuid(), TaskPriority.Medium, DateTime.UtcNow.AddDays(-1));
         task.MarkAsCompleted();
 
         // Act & Assert
@@ -111,7 +111,7 @@ public class TaskTests
     public void IsCompleted_CompletedTask_ShouldReturnTrue()
     {
         // Arrange
-        var task = new Task("Tarefa", "Descrição", Guid.NewGuid());
+        var task = new TaskEntity("Tarefa", "Descrição", Guid.NewGuid());
         task.MarkAsCompleted();
 
         // Act & Assert

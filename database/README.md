@@ -2,22 +2,23 @@
 
 ## 📁 Arquivos
 
+- `railway_tables.sql` - Script para MySQL (Railway)
+- `railway_tables_postgresql.sql` - Script para PostgreSQL (Railway)
 - `create_tables.sql` - Script completo para desenvolvimento local
-- `railway_tables.sql` - Script para Railway (sem CREATE DATABASE)
 
 ## 🚀 Como usar
 
-### 1. Desenvolvimento Local
+### 1. PostgreSQL (Railway)
 
 ```sql
--- Execute o arquivo completo
-SOURCE database/create_tables.sql;
+-- Execute o arquivo PostgreSQL
+SOURCE database/railway_tables_postgresql.sql;
 ```
 
-### 2. Railway
+### 2. MySQL (Railway)
 
 ```sql
--- Execute apenas as tabelas (database já existe)
+-- Execute o arquivo MySQL
 SOURCE database/railway_tables.sql;
 ```
 
@@ -25,13 +26,13 @@ SOURCE database/railway_tables.sql;
 
 1. Abra o DBeaver
 2. Conecte ao banco
-3. Abra o arquivo SQL
+3. Abra o arquivo SQL correto
 4. Execute o script
 
 ## 📊 Estrutura das Tabelas
 
 ### Users
-- `Id` - GUID (Primary Key)
+- `Id` - UUID (Primary Key)
 - `Name` - Nome do usuário
 - `Email` - Email único
 - `PasswordHash` - Hash da senha
@@ -42,7 +43,7 @@ SOURCE database/railway_tables.sql;
 - `IsDeleted` - Soft delete
 
 ### Tasks
-- `Id` - GUID (Primary Key)
+- `Id` - UUID (Primary Key)
 - `Title` - Título da tarefa
 - `Description` - Descrição
 - `Status` - Status (0=Pending, 1=InProgress, 2=Completed, 3=Cancelled)
@@ -57,11 +58,20 @@ SOURCE database/railway_tables.sql;
 
 ### Verificar tabelas
 ```sql
+-- PostgreSQL
+\dt
+
+-- MySQL
 SHOW TABLES;
 ```
 
 ### Ver estrutura
 ```sql
+-- PostgreSQL
+\d Users
+\d Tasks
+
+-- MySQL
 DESCRIBE Users;
 DESCRIBE Tasks;
 ```
@@ -96,5 +106,21 @@ O script inclui:
 - Depois a tabela `Tasks`
 
 ### Erro: Duplicate entry
-- Use `INSERT IGNORE` (Railway)
-- Ou verifique se os dados já existem
+- Use `ON CONFLICT DO NOTHING` (PostgreSQL)
+- Use `INSERT IGNORE` (MySQL)
+
+### Erro: Syntax error at INDEX
+- Use o script PostgreSQL: `railway_tables_postgresql.sql`
+- Ou use o script MySQL: `railway_tables.sql`
+
+## 🐘 Diferenças PostgreSQL vs MySQL
+
+| Recurso | PostgreSQL | MySQL |
+|---------|------------|-------|
+| UUID | `UUID` | `CHAR(36)` |
+| Timestamp | `TIMESTAMP(6)` | `DATETIME(6)` |
+| Integer | `INTEGER` | `INT` |
+| Auto UUID | `gen_random_uuid()` | `UUID()` |
+| Interval | `INTERVAL '7 days'` | `INTERVAL 7 DAY` |
+| Conflict | `ON CONFLICT DO NOTHING` | `INSERT IGNORE` |
+| Index | `CREATE INDEX IF NOT EXISTS` | `CREATE INDEX` |

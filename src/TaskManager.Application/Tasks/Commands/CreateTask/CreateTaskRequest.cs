@@ -10,5 +10,6 @@ public record CreateTaskCommand(
     string Description,
     Guid UserId,
     TaskPriority Priority = TaskPriority.Medium,
-    DateTime? DueDate = null
+    DateTime? DueDate = null,
+    Guid? AssignedToUserId = null
 ) : IRequest<Result<Guid>>;

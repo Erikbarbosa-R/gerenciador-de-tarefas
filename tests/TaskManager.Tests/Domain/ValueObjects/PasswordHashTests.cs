@@ -24,10 +24,10 @@ public class PasswordHashTests
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void Create_InvalidPassword_ShouldThrowException(string password)
+    public void Create_InvalidPassword_ShouldThrowException(string? password)
     {
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => PasswordHash.Create(password));
+        Assert.Throws<ArgumentException>(() => PasswordHash.Create(password!));
     }
 
     [Theory]

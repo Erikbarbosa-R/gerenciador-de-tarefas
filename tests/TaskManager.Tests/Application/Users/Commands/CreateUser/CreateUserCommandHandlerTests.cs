@@ -26,7 +26,7 @@ public class CreateUserCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ValidCommand_ShouldReturnSuccess()
+    public async System.Threading.Tasks.Task Handle_ValidCommand_ShouldReturnSuccess()
     {
         // Arrange
         var command = new CreateUserCommand(
@@ -59,7 +59,7 @@ public class CreateUserCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_EmailAlreadyExists_ShouldReturnFailure()
+    public async System.Threading.Tasks.Task Handle_EmailAlreadyExists_ShouldReturnFailure()
     {
         // Arrange
         var command = new CreateUserCommand(
@@ -84,7 +84,7 @@ public class CreateUserCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_InvalidEmail_ShouldThrowException()
+    public async System.Threading.Tasks.Task Handle_InvalidEmail_ShouldThrowException()
     {
         // Arrange
         var command = new CreateUserCommand(

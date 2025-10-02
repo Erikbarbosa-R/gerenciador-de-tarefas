@@ -20,7 +20,8 @@ public class DeleteTaskCommandHandler : IRequestHandler<DeleteTaskCommand, Resul
     {
         try
         {
-            var task = await _unitOfWork.Tasks.GetByIdAsync(request.Id, cancellationToken);
+            // Usa método simples sem JOINs para evitar problemas de timeout
+            var task = await _unitOfWork.Tasks.GetByIdForDeleteAsync(request.Id, cancellationToken);
             if (task == null)
             {
                 return Result.Failure("Tarefa não encontrada");

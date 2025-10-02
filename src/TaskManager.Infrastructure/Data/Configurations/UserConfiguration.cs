@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TaskManager.Domain.Entities;
+using TaskManager.Domain.ValueObjects;
 
 namespace TaskManager.Infrastructure.Data.Configurations;
 
@@ -8,47 +9,55 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.ToTable("users", "public");
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.Id)
             .IsRequired()
-            .HasConversion(
-                v => v.ToString(),
-                v => Guid.Parse(v));
+            .HasColumnName("id")
+            .HasColumnType("uuid");
 
         builder.Property(u => u.Name)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(100)
+            .HasColumnName("name");
 
         builder.Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(255)
+            .HasColumnName("email")
             .HasConversion(
                 v => v.Value,
-                v => new Domain.ValueObjects.Email(v));
+                v => Email.From(v));
 
         builder.Property(u => u.PasswordHash)
             .IsRequired()
+            .HasColumnName("passwordhash")
             .HasConversion(
                 v => v.Value,
-                v => new Domain.ValueObjects.PasswordHash(v));
+                v => PasswordHash.From(v));
 
         builder.Property(u => u.Role)
             .IsRequired()
+            .HasColumnName("role")
             .HasConversion<int>();
 
         builder.Property(u => u.IsActive)
             .IsRequired()
+            .HasColumnName("isactive")
             .HasDefaultValue(true);
 
         builder.Property(u => u.CreatedAt)
-            .IsRequired();
+            .IsRequired()
+            .HasColumnName("createdat");
 
         builder.Property(u => u.UpdatedAt)
-            .IsRequired(false);
+            .IsRequired(false)
+            .HasColumnName("updatedat");
 
         builder.Property(u => u.IsDeleted)
             .IsRequired()
+            .HasColumnName("isdeleted")
             .HasDefaultValue(false);
 
         builder.HasIndex(u => u.Email)
@@ -56,7 +65,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(u => u.IsActive);
         builder.HasIndex(u => u.CreatedAt);
-
-        builder.HasQueryFilter(u => !u.IsDeleted);
     }
 }

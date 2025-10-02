@@ -14,37 +14,46 @@ public static class DependencyInjection
     {
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            // Primeiro tenta pegar do DATABASE_URL (Railway)
+            var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+            
+            // Se não encontrar, usa a string de conexão do appsettings
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = configuration.GetConnectionString("DefaultConnection");
+            }
             
             // Verificar se a string de conexão está vazia ou nula
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw new InvalidOperationException("String de conexão não configurada. Verifique a variável DATABASE_URL no Railway.");
+                throw new InvalidOperationException("String de conexão não configurada. Verifique a variável DATABASE_URL ou DefaultConnection.");
             }
             
-            // Se for uma URL de conexão (Railway), usar diretamente
-            if (connectionString.StartsWith("mysql://"))
+            // Log da string de conexão para debug (sem senha)
+            Console.WriteLine($"DEBUG: Connection string = {connectionString.Replace("Password=WASkPWMvXQiIMkMjoXxpzCWTzLwOyVwi", "Password=***")}");
+            
+            // Se for uma URL de conexão PostgreSQL (Railway), converter para formato Npgsql
+            if (connectionString.StartsWith("postgresql://"))
             {
-                options.UseMySql(
-                    connectionString,
-                    new MySqlServerVersion(new Version(8, 0, 0)),
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
-                          .EnableRetryOnFailure(3)
-                          .CommandTimeout(60));
-            }
-            else if (connectionString.Contains("Data Source="))
-            {
-                // SQLite para desenvolvimento local
-                options.UseSqlite(
-                    connectionString,
+                // Converter URL para formato de string de conexão
+                var uri = new Uri(connectionString);
+                var host = uri.Host;
+                var port = uri.Port;
+                var database = uri.AbsolutePath.TrimStart('/');
+                var username = uri.UserInfo.Split(':')[0];
+                var password = uri.UserInfo.Split(':')[1];
+                
+                var npgsqlConnectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};";
+                
+                options.UseNpgsql(
+                    npgsqlConnectionString,
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
             }
             else
             {
-                // String de conexão MySQL tradicional
-                options.UseMySql(
+                // String de conexão PostgreSQL tradicional
+                options.UseNpgsql(
                     connectionString,
-                    new MySqlServerVersion(new Version(8, 0, 0)),
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
             }
         });

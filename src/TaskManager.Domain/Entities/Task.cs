@@ -12,16 +12,19 @@ public class Task : BaseEntity
     public DateTime? DueDate { get; private set; }
     public Guid UserId { get; private set; }
     public User User { get; private set; } = null!;
+    public Guid? AssignedToUserId { get; private set; }
+    public User? AssignedToUser { get; private set; }
 
     private Task() { }
 
-    public Task(string title, string description, Guid userId, TaskPriority priority = TaskPriority.Medium, DateTime? dueDate = null)
+    public Task(string title, string description, Guid userId, TaskPriority priority = TaskPriority.Medium, DateTime? dueDate = null, Guid? assignedToUserId = null)
     {
         Title = title ?? throw new ArgumentNullException(nameof(title));
         Description = description ?? throw new ArgumentNullException(nameof(description));
         UserId = userId;
         Priority = priority;
         DueDate = dueDate;
+        AssignedToUserId = assignedToUserId;
     }
 
     public void UpdateTitle(string title)
@@ -93,5 +96,27 @@ public class Task : BaseEntity
     public bool IsPending()
     {
         return Status == Enums.TaskStatus.Pending;
+    }
+
+    public void AssignToUser(Guid? assignedToUserId)
+    {
+        AssignedToUserId = assignedToUserId;
+        MarkAsUpdated();
+    }
+
+    public void UnassignUser()
+    {
+        AssignedToUserId = null;
+        MarkAsUpdated();
+    }
+
+    public bool IsAssigned()
+    {
+        return AssignedToUserId.HasValue;
+    }
+
+    public bool IsAssignedToUser(Guid userId)
+    {
+        return AssignedToUserId == userId;
     }
 }

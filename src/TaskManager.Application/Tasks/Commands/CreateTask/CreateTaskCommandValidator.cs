@@ -19,7 +19,8 @@ public class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand>
             .NotEmpty().WithMessage("ID do usuário é obrigatório");
 
         RuleFor(x => x.DueDate)
-            .GreaterThan(DateTime.UtcNow).WithMessage("Data de vencimento deve ser no futuro")
+            .Must(dueDate => !dueDate.HasValue || dueDate.Value > DateTime.MinValue)
+            .WithMessage("Data de vencimento inválida")
             .When(x => x.DueDate.HasValue);
     }
 }

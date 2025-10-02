@@ -36,6 +36,8 @@ public class GetTaskQueryHandler : IRequestHandler<GetTaskQuery, Result<TaskDto>
                 Priority = task.Priority,
                 DueDate = task.DueDate,
                 UserId = task.UserId,
+                AssignedToUserId = task.AssignedToUserId,
+                AssignedToUserName = task.AssignedToUser?.Name,
                 CreatedAt = task.CreatedAt,
                 UpdatedAt = task.UpdatedAt
             };

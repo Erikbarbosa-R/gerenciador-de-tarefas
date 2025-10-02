@@ -1,9 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskManager.Application.Tasks.Commands.AssignTask;
 using TaskManager.Application.Tasks.Commands.CreateTask;
 using TaskManager.Application.Tasks.Commands.DeleteTask;
 using TaskManager.Application.Tasks.Commands.UpdateTask;
+using TaskManager.Application.Tasks.DTOs;
 using TaskManager.Application.Tasks.Queries.GetTask;
 using TaskManager.Application.Tasks.Queries.GetTasks;
 
@@ -21,9 +23,6 @@ public class TasksController : ControllerBase
         _mediator = mediator;
     }
 
-    /// <summary>
-    /// Cria uma nova tarefa
-    /// </summary>
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
     {
@@ -35,9 +34,6 @@ public class TasksController : ControllerBase
         return CreatedAtAction(nameof(GetTask), new { id = result.Value }, result.Value);
     }
 
-    /// <summary>
-    /// Obtém uma tarefa por ID
-    /// </summary>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTask(Guid id)
     {
@@ -50,9 +46,6 @@ public class TasksController : ControllerBase
         return Ok(result.Value);
     }
 
-    /// <summary>
-    /// Lista todas as tarefas com filtros opcionais
-    /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetTasks(
         [FromQuery] Guid? userId = null,
@@ -61,22 +54,30 @@ public class TasksController : ControllerBase
         [FromQuery] string? searchTerm = null)
     {
         var query = new GetTasksQuery(userId, status, priority, searchTerm);
-        var result = await _mediator.Send(query);
+        var tasks = await _mediator.Send(query);
         
-        if (result.IsFailure)
-            return BadRequest(result.Error);
-
-        return Ok(result.Value);
+        return Ok(tasks);
     }
 
-    /// <summary>
-    /// Atualiza uma tarefa existente
-    /// </summary>
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTask(Guid id, [FromBody] UpdateTaskCommand command)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTask(Guid id)
     {
-        if (id != command.Id)
-            return BadRequest("ID da URL não corresponde ao ID do comando");
+        await _mediator.Send(new DeleteTaskCommand(id));
+        return NoContent();
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateTask(Guid id, [FromBody] PatchTaskDto dto)
+    {
+        var command = new UpdateTaskCommand(
+            id,
+            dto.Title,
+            dto.Description,
+            dto.Status,
+            dto.Priority,
+            dto.DueDate,
+            dto.AssignedToUserId
+        );
 
         var result = await _mediator.Send(command);
         
@@ -86,18 +87,11 @@ public class TasksController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Remove uma tarefa
-    /// </summary>
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTask(Guid id)
+    [HttpPatch("{id}/assign")]
+    public async Task<IActionResult> AssignTask(Guid id, [FromBody] AssignTaskCommand command)
     {
-        var command = new DeleteTaskCommand(id);
-        var result = await _mediator.Send(command);
-        
-        if (result.IsFailure)
-            return NotFound(result.Error);
-
+        var assignCommand = new AssignTaskCommand(id, command.AssignedToUserId);
+        await _mediator.Send(assignCommand);
         return NoContent();
     }
 }

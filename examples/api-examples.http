@@ -25,7 +25,8 @@ Authorization: Bearer {token}
   "description": "Implementar sistema de autenticação JWT na API",
   "userId": "00000000-0000-0000-0000-000000000000",
   "priority": 2,
-  "dueDate": "2024-12-31T23:59:59Z"
+  "dueDate": "2024-12-31T23:59:59Z",
+  "assignedToUserId": "11111111-1111-1111-1111-111111111111"
 }
 GET https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks
 Authorization: Bearer {token}
@@ -54,11 +55,32 @@ Authorization: Bearer {token}
   "description": "Implementar sistema completo de autenticação JWT na API com refresh tokens",
   "status": 1,
   "priority": 3,
-  "dueDate": "2024-12-25T18:00:00Z"
+  "dueDate": "2024-12-25T18:00:00Z",
+  "assignedToUserId": "22222222-2222-2222-2222-222222222222"
 }
 
 DELETE https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks/00000000-0000-0000-0000-000000000000
 Authorization: Bearer {token}
+
+### Atribuir tarefa para um usuário
+PATCH https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks/00000000-0000-0000-0000-000000000000/assign
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "taskId": "00000000-0000-0000-0000-000000000000",
+  "assignedToUserId": "33333333-3333-3333-3333-333333333333"
+}
+
+### Remover atribuição de tarefa
+PATCH https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/tasks/00000000-0000-0000-0000-000000000000/assign
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "taskId": "00000000-0000-0000-0000-000000000000",
+  "assignedToUserId": null
+}
 POST https://gerenciador-de-tarefas-production-7bba.up.railway.app/api/users/register
 Content-Type: application/json
 

@@ -36,6 +36,8 @@ public class Email : IEquatable<Email>
 
     public static explicit operator Email(string value) => new(value);
 
+    public static Email From(string value) => new(value);
+
     public bool Equals(Email? other)
     {
         if (other is null) return false;

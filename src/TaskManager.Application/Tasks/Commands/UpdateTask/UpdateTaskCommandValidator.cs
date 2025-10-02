@@ -19,7 +19,8 @@ public class UpdateTaskCommandValidator : AbstractValidator<UpdateTaskCommand>
             .MaximumLength(1000).WithMessage("Descrição não pode ter mais de 1000 caracteres");
 
         RuleFor(x => x.DueDate)
-            .GreaterThan(DateTime.UtcNow).WithMessage("Data de vencimento deve ser no futuro")
+            .Must(dueDate => !dueDate.HasValue || dueDate.Value > DateTime.MinValue)
+            .WithMessage("Data de vencimento inválida")
             .When(x => x.DueDate.HasValue);
     }
 }

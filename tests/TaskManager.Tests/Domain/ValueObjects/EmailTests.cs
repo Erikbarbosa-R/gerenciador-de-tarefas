@@ -22,10 +22,10 @@ public class EmailTests
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void Constructor_InvalidEmail_ShouldThrowException(string emailValue)
+    public void Constructor_InvalidEmail_ShouldThrowException(string? emailValue)
     {
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => new Email(emailValue));
+        Assert.Throws<ArgumentException>(() => new Email(emailValue!));
     }
 
     [Theory]

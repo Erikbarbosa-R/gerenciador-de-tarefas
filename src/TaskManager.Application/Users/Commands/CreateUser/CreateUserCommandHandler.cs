@@ -40,7 +40,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
         }
         catch (Exception ex)
         {
-            return Result.Failure<Guid>($"Erro ao criar usuário: {ex.Message}");
+            return Result.Failure<Guid>($"Erro ao criar usuário: {ex.Message}\nInner Exception: {ex.InnerException?.Message}\nStack Trace: {ex.StackTrace}");
         }
     }
 }
