@@ -18,6 +18,9 @@ public class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand>
         RuleFor(x => x.UserId)
             .NotEmpty().WithMessage("ID do usuário é obrigatório");
 
+        RuleFor(x => x.Priority)
+            .IsInEnum().WithMessage("Prioridade deve ser Low (0), Medium (1) ou High (2)");
+
         RuleFor(x => x.DueDate)
             .Must(dueDate => !dueDate.HasValue || dueDate.Value > DateTime.MinValue)
             .WithMessage("Data de vencimento inválida")

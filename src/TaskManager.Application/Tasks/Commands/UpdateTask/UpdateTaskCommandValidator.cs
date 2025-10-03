@@ -10,6 +10,10 @@ public class UpdateTaskCommandValidator : AbstractValidator<UpdateTaskCommand>
         RuleFor(x => x.Id)
             .NotEmpty().WithMessage("ID da tarefa é obrigatório");
 
+        RuleFor(x => x.Priority)
+            .IsInEnum().WithMessage("Prioridade deve ser Low (0), Medium (1) ou High (2)")
+            .When(x => x.Priority.HasValue);
+
         RuleFor(x => x.Title)
             .MaximumLength(200).WithMessage("Título não pode ter mais de 200 caracteres")
             .When(x => !string.IsNullOrEmpty(x.Title));
