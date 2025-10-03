@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TaskManager.Application.Common.Models;
+using TaskManager.Domain.Interfaces;
 
 namespace TaskManager.Application.Tasks.Commands.UpdateTask;
 
