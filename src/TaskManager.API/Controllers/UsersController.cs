@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Application.Users.Commands.AuthenticateUser;
 using TaskManager.Application.Users.Commands.CreateUser;
+using TaskManager.Application.Users.Queries.GetUsers;
 
 namespace TaskManager.API.Controllers;
 
@@ -15,6 +16,19 @@ public class UsersController : ControllerBase
     public UsersController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetUsers()
+    {
+        var query = new GetUsersQuery();
+        var result = await _mediator.Send(query);
+        
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     [HttpPost("register")]
