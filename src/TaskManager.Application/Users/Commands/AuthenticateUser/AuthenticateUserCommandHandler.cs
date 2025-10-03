@@ -11,6 +11,7 @@ using TaskManager.Application.Common.Models;
 using TaskManager.Application.Users.DTOs;
 using TaskManager.Domain.Interfaces;
 using TaskManager.Domain.ValueObjects;
+using TaskManager.Domain.Helpers;
 
 namespace TaskManager.Application.Users.Commands.AuthenticateUser;
 
@@ -85,7 +86,7 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(24),
+            expires: DateTimeHelper.Now.AddHours(24),
             signingCredentials: credentials
         );
 

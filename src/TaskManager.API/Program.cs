@@ -10,8 +10,14 @@ using TaskManager.Application;
 using TaskManager.Infrastructure;
 using TaskManager.Infrastructure.Data;
 using DotNetEnv;
+using System.Globalization;
+using TaskManager.Domain.Helpers;
 
 Env.Load();
+
+// Configurar cultura para Brasil
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
+CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("pt-BR");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,7 +122,7 @@ app.UseAuthorization();
 
 app.MapGet("/health", () => new { 
     status = "ok", 
-    timestamp = DateTime.UtcNow,
+    timestamp = DateTimeHelper.Now,
     version = "1.0.0",
     environment = app.Environment.EnvironmentName
 });
