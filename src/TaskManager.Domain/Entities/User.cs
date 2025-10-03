@@ -1,4 +1,3 @@
-using TaskManager.Domain.Enums;
 using TaskManager.Domain.ValueObjects;
 
 namespace TaskManager.Domain.Entities;
@@ -8,7 +7,6 @@ public class User : BaseEntity
     public string Name { get; private set; } = string.Empty;
     public Email Email { get; private set; } = null!;
     public PasswordHash PasswordHash { get; private set; } = null!;
-    public UserRole Role { get; private set; } = UserRole.User;
     public bool IsActive { get; private set; } = true;
 
     private readonly List<Entities.Task> _tasks = new();
@@ -16,12 +14,11 @@ public class User : BaseEntity
 
     private User() { }
 
-    public User(string name, Email email, PasswordHash passwordHash, UserRole role = UserRole.User)
+    public User(string name, Email email, PasswordHash passwordHash)
     {
         Name = name;
         Email = email;
         PasswordHash = passwordHash;
-        Role = role;
     }
 
     public void UpdateName(string name)
@@ -45,11 +42,6 @@ public class User : BaseEntity
         MarkAsUpdated();
     }
 
-    public void ChangeRole(UserRole role)
-    {
-        Role = role;
-        MarkAsUpdated();
-    }
 
     public void Activate()
     {

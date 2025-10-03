@@ -49,8 +49,7 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
                 Token = token,
                 UserId = user.Id,
                 Name = user.Name,
-                Email = user.Email.Value,
-                Role = user.Role
+                Email = user.Email.Value
             };
 
             return Result.Success(result);
@@ -79,7 +78,7 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email.Value),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
+            new Claim(ClaimTypes.Role, "User")
         };
 
         var token = new JwtSecurityToken(

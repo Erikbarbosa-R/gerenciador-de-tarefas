@@ -32,8 +32,7 @@ public class CreateUserCommandHandlerTests
         var command = new CreateUserCommand(
             "Usuário Teste",
             "teste@teste.com",
-            "senha123",
-            UserRole.User
+            "senha123"
         );
 
         _userRepositoryMock.Setup(x => x.EmailExistsAsync(It.IsAny<Email>(), It.IsAny<CancellationToken>()))

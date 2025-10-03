@@ -31,7 +31,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
             }
 
             var passwordHash = PasswordHash.Create(request.Password);
-            var user = new User(request.Name, email, passwordHash, request.Role);
+            var user = new User(request.Name, email, passwordHash);
 
             await _unitOfWork.Users.AddAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

@@ -37,10 +37,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 v => v.Value,
                 v => PasswordHash.From(v));
 
-        builder.Property(u => u.Role)
-            .IsRequired()
-            .HasColumnName("role")
-            .HasConversion<int>();
 
         builder.Property(u => u.IsActive)
             .IsRequired()
