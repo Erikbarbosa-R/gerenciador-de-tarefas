@@ -2,7 +2,7 @@
 
 Um gerenciador de tarefas completo implementado com .NET 8, seguindo os princípios de Clean Architecture e Clean Code.
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 O projeto segue os princípios da Clean Architecture, organizado em camadas:
 
@@ -11,38 +11,38 @@ O projeto segue os princípios da Clean Architecture, organizado em camadas:
 - **Infrastructure**: Implementações de repositórios, Entity Framework e serviços externos
 - **API**: Controllers, Middlewares e configurações da API
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 ### Tarefas
-- ✅ Criar tarefa
-- ✅ Editar tarefa
-- ✅ Deletar tarefa
-- ✅ Listar tarefas
-- ✅ Visualizar detalhes de uma tarefa
-- ✅ Filtros por usuário, status, prioridade
-- ✅ Busca por texto
-- ✅ Tarefas vencidas
-- ✅ Tarefas do dia
+- Criar tarefa
+- Editar tarefa
+- Deletar tarefa
+- Listar tarefas
+- Visualizar detalhes de uma tarefa
+- Filtros por usuário, status, prioridade
+- Busca por texto
+- Tarefas vencidas
+- Tarefas do dia
 
 ### Usuários
-- ✅ Cadastro de usuário
-- ✅ Autenticação JWT
-- ✅ Controle de acesso por roles
-- ✅ Validação de email único
+- Cadastro de usuário
+- Autenticação JWT
+- Controle de acesso por roles
+- Validação de email único
 
 ### Recursos Técnicos
-- ✅ Autenticação JWT
-- ✅ Swagger/OpenAPI
-- ✅ Logging com Serilog
-- ✅ Tratamento de erros global
-- ✅ Validações com FluentValidation
-- ✅ Testes unitários
-- ✅ Entity Framework Core
-- ✅ CQRS com MediatR
-- ✅ Repository Pattern
-- ✅ Unit of Work Pattern
+- Autenticação JWT
+- Swagger/OpenAPI
+- Logging com Serilog
+- Tratamento de erros global
+- Validações com FluentValidation
+- Testes unitários
+- Entity Framework Core
+- CQRS com MediatR
+- Repository Pattern
+- Unit of Work Pattern
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 - **.NET 8**
 - **Entity Framework Core 8**
@@ -56,7 +56,7 @@ O projeto segue os princípios da Clean Architecture, organizado em camadas:
 - **FluentAssertions**
 - **Moq**
 
-## 📋 Pré-requisitos
+## Pré-requisitos
 
 ### Desenvolvimento Local
 - .NET 8 SDK
@@ -68,7 +68,7 @@ O projeto segue os princípios da Clean Architecture, organizado em camadas:
 - Railway CLI
 - Git
 
-## 🚀 Como executar
+## Como executar
 
 ### Desenvolvimento Local
 
@@ -107,7 +107,9 @@ O projeto segue os princípios da Clean Architecture, organizado em camadas:
 2. **Faça login**
    ```bash
    railway login
-   ```
+
+
+```
 
 3. **Execute o script de deploy**
    ```bash
@@ -125,15 +127,15 @@ O projeto segue os princípios da Clean Architecture, organizado em camadas:
 
 Para mais detalhes, consulte [docs/RAILWAY_DEPLOY.md](docs/RAILWAY_DEPLOY.md)
 
-## 🧪 Executar testes
+## Executar testes
 
 ```bash
 dotnet test
 ```
 
-## 📚 Endpoints da API
+## Endpoints da API
 
-### Autenticação
+### Autentificação
 - `POST /api/users/register` - Registrar usuário
 - `POST /api/users/login` - Fazer login
 
@@ -144,14 +146,14 @@ dotnet test
 - `PUT /api/tasks/{id}` - Atualizar tarefa
 - `DELETE /api/tasks/{id}` - Deletar tarefa
 
-## 🔐 Autenticação
+## Autentificação
 
 A API utiliza JWT para autenticação. Para acessar os endpoints protegidos:
 
 1. Registre um usuário ou faça login
 2. Use o token retornado no header `Authorization: Bearer {token}`
 
-## 📊 Estrutura do Banco de Dados
+## Estrutura do Banco de Dados
 
 ### Tabela Users
 - Id (Guid, PK)
@@ -176,7 +178,7 @@ A API utiliza JWT para autenticação. Para acessar os endpoints protegidos:
 - UpdatedAt (DateTime?)
 - IsDeleted (bool)
 
-## 🎯 Padrões de Design Implementados
+## Padrões de Design Implementados
 
 - **Repository Pattern**: Abstração do acesso a dados
 - **Unit of Work**: Controle de transações
@@ -186,7 +188,7 @@ A API utiliza JWT para autenticação. Para acessar os endpoints protegidos:
 - **Domain Events**: Eventos de domínio (preparado para implementação)
 - **Specification Pattern**: Consultas complexas (preparado para implementação)
 
-## 🔧 Configuração
+## Configuração
 
 ### appsettings.json
 ```json
@@ -216,7 +218,7 @@ A API utiliza JWT para autenticação. Para acessar os endpoints protegidos:
 }
 ```
 
-## 📈 Melhorias Futuras
+## Melhorias Futuras
 
 - [ ] Implementar Domain Events
 - [ ] Adicionar cache com Redis
@@ -229,7 +231,7 @@ A API utiliza JWT para autenticação. Para acessar os endpoints protegidos:
 - [ ] Implementar auditoria
 - [ ] Adicionar versionamento da API
 
-## 🤝 Contribuição
+## Contribuição
 
 1. Fork o projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
@@ -237,6 +239,6 @@ A API utiliza JWT para autenticação. Para acessar os endpoints protegidos:
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## 📄 Licença
+## Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
