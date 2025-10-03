@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskManager.Application.Users.Commands.AuthenticateUser;
 using TaskManager.Application.Users.Commands.CreateUser;
 using TaskManager.Application.Users.Queries.GetUsers;
+using TaskManager.Application.Users.Queries.GetUserById;
 
 namespace TaskManager.API.Controllers;
 
@@ -16,6 +17,19 @@ public class UsersController : ControllerBase
     public UsersController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet("{id}")]
+    [Authorize]
+    public async Task<IActionResult> GetUserById(Guid id)
+    {
+        var query = new GetUserByIdQuery(id);
+        var result = await _mediator.Send(query);
+        
+        if (result.IsFailure)
+            return NotFound(result.Error);
+
+        return Ok(result.Value);
     }
 
     [HttpGet]
