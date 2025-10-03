@@ -12,5 +12,6 @@ public record UpdateTaskCommand(
     TaskStatus? Status = null,
     TaskPriority? Priority = null,
     DateTime? DueDate = null,
-    Guid? AssignedToUserId = null
+    Guid? AssignedToUserId = null,
+    bool? RemoveAssignment = null
 ) : IRequest<Result>;

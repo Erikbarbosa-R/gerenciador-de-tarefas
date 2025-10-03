@@ -42,15 +42,8 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
             if (request.DueDate.HasValue)
                 task.SetDueDate(request.DueDate.Value);
 
-            if (request.AssignedToUserId.HasValue)
-            {
-                var assignedUser = await _unitOfWork.Users.GetByIdAsync(request.AssignedToUserId.Value, cancellationToken);
-                if (assignedUser == null && request.AssignedToUserId != Guid.Empty)
-                {
-                    return Result.Failure("Usuário atribuído não encontrado");
-                }
-                task.AssignToUser(request.AssignedToUserId);
-            }
+            // Sempre processar AssignedToUserId quando presente no request
+            task.AssignToUser(request.AssignedToUserId);
 
             await _unitOfWork.Tasks.UpdateAsync(task, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
