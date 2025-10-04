@@ -15,7 +15,7 @@ Este é um **Sistema de Gerenciamento de Tarefas** completo construído em **.NE
 - **Autenticação JWT** - Login/registro de usuários
 - **CRUD de Tarefas** - Criar, ler, atualizar e deletar tarefas  
 - **Gestão de Usuários** - Sistema de perfis (Admin/User)
-- **Sistema de Prioridades** - Low, Medium, High, Critical
+- **Sistema de Prioridades** - Low, Medium, High
 - **Filtros e Busca** - Por status, usuário, prioridade
 - **Deploy Automático** - Railway com PostgreSQL
 

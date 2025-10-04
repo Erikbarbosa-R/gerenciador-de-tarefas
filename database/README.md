@@ -1,12 +1,12 @@
 # Scripts SQL - Task Manager
 
-## 📁 Arquivos
+##  Arquivos
 
 - `railway_tables.sql` - Script para MySQL (Railway)
 - `railway_tables_postgresql.sql` - Script para PostgreSQL (Railway)
 - `create_tables.sql` - Script completo para desenvolvimento local
 
-## 🚀 Como usar
+##  Como usar
 
 ### 1. PostgreSQL (Railway)
 
@@ -29,7 +29,7 @@ SOURCE database/railway_tables.sql;
 3. Abra o arquivo SQL correto
 4. Execute o script
 
-## 📊 Estrutura das Tabelas
+##  Estrutura das Tabelas
 
 ### Users
 - `Id` - UUID (Primary Key)
@@ -88,14 +88,14 @@ SELECT COUNT(*) FROM Users WHERE IsDeleted = FALSE;
 SELECT COUNT(*) FROM Tasks WHERE IsDeleted = FALSE;
 ```
 
-## 🎯 Dados de Exemplo
+##  Dados de Exemplo
 
 O script inclui:
 - 3 usuários (1 admin, 2 usuários)
 - 3 tarefas de exemplo
 - Dados para teste da API
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### Erro: Table already exists
 - Use `CREATE TABLE IF NOT EXISTS` (Railway)
@@ -113,7 +113,7 @@ O script inclui:
 - Use o script PostgreSQL: `railway_tables_postgresql.sql`
 - Ou use o script MySQL: `railway_tables.sql`
 
-## 🐘 Diferenças PostgreSQL vs MySQL
+##  Diferenças PostgreSQL vs MySQL
 
 | Recurso | PostgreSQL | MySQL |
 |---------|------------|-------|
